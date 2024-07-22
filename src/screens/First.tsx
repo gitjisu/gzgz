@@ -53,7 +53,7 @@ const First = ({navigation}: Props) => {
           style={{
             justifyContent: 'center',
             alignItems: 'center',
-            height: '90%',
+            height: '60%',
           }}>
           <Pressable
             style={{
@@ -90,9 +90,27 @@ const First = ({navigation}: Props) => {
           </Pressable>
         </FlipCard>
         {buttonVisible && (
-          <Pressable onPress={() => navigation.navigate('Second')}>
-            <Text>도전</Text>
-          </Pressable>
+          <>
+            <Pressable
+              style={{
+                borderWidth: 1,
+                height: 70,
+              }}
+              onPress={() => navigation.navigate('Second')}>
+              <Text>도전</Text>
+            </Pressable>
+            <Pressable
+              style={{
+                borderWidth: 1,
+                height: 70,
+              }}
+              onPress={() => {
+                setButtonVisible(false);
+                cardRef?.current.flip();
+              }}>
+              <Text>다시뽑기</Text>
+            </Pressable>
+          </>
         )}
       </View>
     </SafeAreaView>
