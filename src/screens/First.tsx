@@ -4,6 +4,8 @@ import {AppNavigationType} from '../navigation/StackBase';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import FlipCard from 'react-native-card-flip';
 import {useFocusEffect} from '@react-navigation/native';
+import missionJson from '../assets/json/mission.json';
+
 type Props = {
   navigation: AppNavigationType;
 };
@@ -11,6 +13,8 @@ type Props = {
 const First = ({navigation}: Props) => {
   const cardRef = useRef<any>(null);
   const [buttonVisible, setButtonVisible] = useState(false);
+
+  const [mission, setMission] = useState('');
 
   const initializeState = () => {
     setTimeout(() => {
@@ -26,6 +30,18 @@ const First = ({navigation}: Props) => {
       };
     }, []),
   );
+
+  useEffect(() => {
+    if (!buttonVisible) {
+      const listLen = missionJson.list.length;
+
+      const randomNum = Math.floor(Math.random() * listLen);
+      setTimeout(() => {
+        setMission(missionJson.list[randomNum]);
+      }, 1000);
+    }
+  }, [buttonVisible]);
+
   return (
     <SafeAreaView style={{flex: 1, paddingHorizontal: 16}}>
       <View
@@ -81,12 +97,13 @@ const First = ({navigation}: Props) => {
               justifyContent: 'center',
               alignItems: 'center',
             }}>
-            <Image
+            <Text>{mission}</Text>
+            {/* <Image
               source={{
                 uri: 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3N2NnFjOHFzYmNreWw4OWJpZHQybXFiMTRjaTNxbHpyZWN3N3gwbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/etVRxrHtfS0tW1KIZy/giphy.webp',
               }}
               style={{width: '100%', height: '100%'}}
-            />
+            /> */}
           </Pressable>
         </FlipCard>
         {buttonVisible && (

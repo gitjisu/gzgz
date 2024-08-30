@@ -44,22 +44,18 @@ const Second = ({navigation}: Props) => {
           fromUrl: source,
           toFile: path,
         }).promise;
+        if (result) {
+          if (Platform.OS === 'android') {
+            RNFS.scanFile(path);
+            Alert.alert('저장했어요! 자랑은 필수! (~‾⌣‾)~');
+          } else {
+            const iosResult = await CameraRoll.save(path, {type: 'photo'});
 
-        if (result.statusCode === 200) {
-          const iosResult = await CameraRoll.save(path);
+            if (iosResult) {
+              Alert.alert('저장했어요! 자랑은 필수! (~‾⌣‾)~');
+            }
+          }
         }
-        // if (result) {
-        //   if (Platform.OS === 'android') {
-        //     RNFS.scanFile(path);
-        //     Alert.alert('success', '사진이 저장되었습니다.');
-        //   } else {
-        //     const iosResult = await CameraRoll.save(path, {type: 'photo'});
-
-        //     if (iosResult) {
-        //       Alert.alert('success', '사진이 저장되었습니다.');
-        //     }
-        //   }
-        // }
       } catch (error) {
         console.log(error);
         return;
@@ -86,8 +82,8 @@ const Second = ({navigation}: Props) => {
   };
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View style={{flex: 2, backgroundColor: 'red'}}>
-        <ViewShot ref={imageRef}>
+      <ViewShot ref={imageRef} style={{flex: 2, backgroundColor: 'red'}}>
+        <View>
           <View>
             <Image
               resizeMode="contain"
@@ -98,8 +94,8 @@ const Second = ({navigation}: Props) => {
 
             <Text style={{color: 'red'}}>인스타그램으로 꼬꼬!</Text>
           </View>
-        </ViewShot>
-      </View>
+        </View>
+      </ViewShot>
       <View style={{flex: 1, backgroundColor: 'orange'}}>
         <Pressable
           style={{flex: 1, borderWidth: 1}}
