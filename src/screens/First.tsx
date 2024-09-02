@@ -25,7 +25,7 @@ const First = ({navigation}: Props) => {
   useFocusEffect(
     useCallback(() => {
       return () => {
-        // Cleanup 함수 (화면에서 벗어날 때 실행됨)
+        
         initializeState();
       };
     }, []),
