@@ -47,12 +47,12 @@ const Second = ({navigation}: Props) => {
         if (result) {
           if (Platform.OS === 'android') {
             RNFS.scanFile(path);
-            Alert.alert('저장했어요! 자랑은 필수! (~‾⌣‾)~');
+            Alert.alert('저장했어요! 자랑은 필수!');
           } else {
             const iosResult = await CameraRoll.save(path, {type: 'photo'});
 
             if (iosResult) {
-              Alert.alert('저장했어요! 자랑은 필수! (~‾⌣‾)~');
+              Alert.alert('저장했어요! 자랑은 필수!');
             }
           }
         }
