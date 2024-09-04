@@ -92,7 +92,7 @@ const Second = ({navigation}: Props) => {
                 uri: 'https://velog.velcdn.com/images/aborile/post/2c73f647-268d-480d-a6f6-b0c914031621/image.png',
               }}></Image>
 
-            <Text style={{color: 'red'}}>인스타그램으로 꼬꼬!</Text>
+            <Text style={{color: 'red'}}>인스타그램으로 꼬꼬!소스트리테스트</Text>
           </View>
         </View>
       </ViewShot>
