@@ -12,27 +12,27 @@ type Props = {
 
 const First = ({navigation}: Props) => {
   const cardRef = useRef<any>(null);
-  const [buttonVisible, setButtonVisible] = useState(false);
-
-  const [mission, setMission] = useState('');
+  const [isFlipped, setIsFlipped] = useState<boolean>(false);
+  const [difficulty, setDifficulty] = useState<number>(0);
+  const [mission, setMission] = useState<string>('');
 
   const initializeState = () => {
     setTimeout(() => {
-      setButtonVisible(false);
+      setIsFlipped(false);
       cardRef?.current.flip();
     }, 1000);
   };
+
   useFocusEffect(
     useCallback(() => {
       return () => {
-        
         initializeState();
       };
     }, []),
   );
 
   useEffect(() => {
-    if (!buttonVisible) {
+    if (!isFlipped) {
       const listLen = missionJson.list.length;
 
       const randomNum = Math.floor(Math.random() * listLen);
@@ -40,49 +40,94 @@ const First = ({navigation}: Props) => {
         setMission(missionJson.list[randomNum]);
       }, 1000);
     }
-  }, [buttonVisible]);
+  }, [isFlipped]);
 
   return (
-    <SafeAreaView style={{flex: 1, paddingHorizontal: 16}}>
+    <SafeAreaView
+      edges={['top', 'bottom']}
+      style={{flex: 1, backgroundColor: '#F7D7DB'}}>
       <View
         style={{
-          height: 145,
-          borderWidth: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 32,
+          height: 62,
+          flexDirection: 'row',
         }}>
-        <Text
+        <Pressable
+          onPress={() => setDifficulty(0)}
           style={{
-            textAlign: 'center',
+            flex: 1,
+            backgroundColor: difficulty === 0 ? '#F7D7DB' : '#ffffff',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
-          낭만을 찾으려면{'\n'}귀찮음을 감수해야 한다
-        </Text>
+          <Text
+            style={{
+              fontSize: 20,
+              lineHeight: 30,
+              color: difficulty === 0 ? '#333333' : '#777777',
+            }}>
+            낭만 초보
+          </Text>
+        </Pressable>
+        <Pressable
+          onPress={() => setDifficulty(1)}
+          style={{
+            flex: 1,
+            backgroundColor: difficulty === 1 ? '#F7D7DB' : '#ffffff',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              fontSize: 20,
+              lineHeight: 30,
+              color: difficulty === 1 ? '#333333' : '#777777',
+            }}>
+            낭만 고수
+          </Text>
+        </Pressable>
       </View>
       <View
         style={{
-          borderWidth: 1,
           flex: 1,
+          paddingHorizontal: 32,
+          paddingVertical: 36,
         }}>
+        <View
+          style={{
+            alignItems: 'center',
+            marginBottom: 16,
+          }}>
+          <Text>
+            {isFlipped
+              ? `짜잔!${difficulty === 0 ? '순한맛' : '매운맛'}`
+              : `카드를 뒤집어 보세요!${
+                  difficulty === 0 ? '순한맛' : '매운맛'
+                }`}
+          </Text>
+        </View>
         <FlipCard
           ref={cardRef}
           style={{
             justifyContent: 'center',
             alignItems: 'center',
-            height: '60%',
+            flex: 1,
           }}>
           <Pressable
             style={{
               flex: 1,
-              backgroundColor: 'red',
               justifyContent: 'center',
               alignItems: 'center',
+              borderWidth: 1,
             }}
             onPress={() => {
-              setButtonVisible(true);
+              setIsFlipped(true);
               cardRef?.current.flip();
             }}>
-            <Text>뒤집어!</Text>
+            <Image
+              resizeMode="contain"
+              style={{width: '100%', height: '100%'}}
+              source={require('../assets/img/front.png')}
+            />
           </Pressable>
           <Pressable
             onPress={() => {
@@ -94,41 +139,45 @@ const First = ({navigation}: Props) => {
             }}
             style={{
               flex: 1,
+              borderColor: 'red',
               justifyContent: 'center',
               alignItems: 'center',
+              borderWidth: 1,
             }}>
-            <Text>{mission}</Text>
-            {/* <Image
-              source={{
-                uri: 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3N2NnFjOHFzYmNreWw4OWJpZHQybXFiMTRjaTNxbHpyZWN3N3gwbiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/etVRxrHtfS0tW1KIZy/giphy.webp',
-              }}
-              style={{width: '100%', height: '100%'}}
-            /> */}
+            <Image
+              resizeMode="contain"
+              style={{width: '100%', height: '100%', position: 'absolute'}}
+              source={require('../assets/img/image24.png')}></Image>
+            <View style={{borderWidth: 1, padding: 100}}>
+              <Text>{mission}</Text>
+            </View>
           </Pressable>
         </FlipCard>
-        {buttonVisible && (
-          <>
-            <Pressable
-              style={{
-                borderWidth: 1,
-                height: 70,
-              }}
-              onPress={() => navigation.navigate('Second')}>
-              <Text>도전</Text>
-            </Pressable>
-            <Pressable
-              style={{
-                borderWidth: 1,
-                height: 70,
-              }}
-              onPress={() => {
-                setButtonVisible(false);
-                cardRef?.current.flip();
-              }}>
-              <Text>다시뽑기</Text>
-            </Pressable>
-          </>
-        )}
+        <View style={{height: 140}}>
+          {isFlipped && (
+            <>
+              <Pressable
+                style={{
+                  borderWidth: 1,
+                  height: 70,
+                }}
+                onPress={() => navigation.navigate('Second')}>
+                <Text>도전</Text>
+              </Pressable>
+              <Pressable
+                style={{
+                  borderWidth: 1,
+                  height: 70,
+                }}
+                onPress={() => {
+                  setIsFlipped(false);
+                  cardRef?.current.flip();
+                }}>
+                <Text>다시뽑기</Text>
+              </Pressable>
+            </>
+          )}
+        </View>
       </View>
     </SafeAreaView>
   );
